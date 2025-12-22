@@ -43,9 +43,14 @@ jobs:
         run: |
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
-
-          git pull origin main --rebase
+          
           git add preprocessing/banktransactions_preprocessing.csv
-          git commit -m "auto: update preprocessed dataset" || echo "No changes to commit"
-          git push origin main
+                    
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "auto: update preprocessed dataset"           
+            git pull origin main --rebase
+            git push origin main
+          fi
 
