@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import os
 
 from sklearn.preprocessing import StandardScaler, LabelEncoder
 
@@ -65,3 +66,13 @@ def preprocess_data(df: pd.DataFrame):
     # Output data
     # =====================================================
     return df_scaled
+
+if __name__ == "__main__":
+
+    RAW_PATH = "../banktransaction_raw.csv"
+    OUTPUT_PATH = "banktransaction_preprocessing.csv"
+
+    df_raw = pd.read_csv(RAW_PATH)
+    df_processed = preprocess_data(df_raw)
+
+    df_processed.to_csv(OUTPUT_PATH, index=False)
