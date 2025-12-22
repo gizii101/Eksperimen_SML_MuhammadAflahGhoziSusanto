@@ -14,7 +14,7 @@ on:
     paths:
       - "preprocessing/automate_MuhammadAflahGhoziSusanto.py"
       - "preprocessing/Eksperimen_MuhammadAflahGhoziSusanto.ipynb"
-      - "banktransactions_raw.csv"
+      - "heart_raw.csv"
 
   workflow_dispatch:
 
@@ -48,14 +48,11 @@ jobs:
           git config --global user.name "github-actions"
           git config --global user.email "github-actions@github.com"
 
-          git add preprocessing/banktransactions_preprocessing.csv
+          git add preprocessing/heart_preprocessing.csv
 
           if git diff --staged --quiet; then
             echo "No changes to commit"
           else
-            git commit -m "auto: update preprocessed dataset"
+            git commit -m "auto: update heart preprocessing dataset"
             git push origin main --force-with-lease
           fi
-
-
-
