@@ -6,7 +6,7 @@ on:
       - main
     paths:
       - "preprocessing/**"
-      - "banktransaction_raw.csv"
+      - "banktransactions_raw.csv"
 
   workflow_dispatch:
 
