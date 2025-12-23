@@ -1,7 +1,6 @@
 import pandas as pd
 import mlflow
 import mlflow.sklearn
-import os
 
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -10,28 +9,22 @@ from sklearn.metrics import accuracy_score, classification_report
 
 def main():
     # =========================================
-    # 1. SET TRACKING URI (SQLite - LOCAL)
+    # 1. SET TRACKING URI (LOCAL FILE)
     # =========================================
-    mlflow.set_tracking_uri("sqlite:///mlflow.db")
+    mlflow.set_tracking_uri("file:./mlruns")
 
     # =========================================
     # 2. SET EXPERIMENT NAME
     # =========================================
-    mlflow.set_experiment("Heart_Disease_Prediction_Experiment")
+    mlflow.set_experiment("CI_Heart_Disease_Training")
 
-    # Aktifkan autolog
+    # Aktifkan autolog (sesuai CI + Basic)
     mlflow.sklearn.autolog()
 
     # =========================================
-    # 3. LOAD DATASET (PREPROCESSED)
+    # 3. LOAD DATASET
     # =========================================
-    data_path = "heart_preprocessing.csv"
-
-    if not os.path.exists(data_path):
-        print(f"Error: File {data_path} tidak ditemukan!")
-        return
-
-    df = pd.read_csv(data_path)
+    df = pd.read_csv("heart_preprocessing.csv")
 
     X = df.drop(columns=["HeartDisease"])
     y = df["HeartDisease"]
@@ -65,14 +58,18 @@ def main():
         y_pred = model.predict(X_test)
         acc = accuracy_score(y_test, y_pred)
 
+        # Simpan classification report sebagai artifact
+        report = classification_report(y_test, y_pred)
+        with open("classification_report.txt", "w") as f:
+            f.write(report)
+
+        mlflow.log_artifact("classification_report.txt")
+
         print("-" * 40)
-        print("Model Berhasil Dilatih!")
+        print("CI Training Selesai")
         print("Accuracy:", acc)
         print("-" * 40)
-        print("Classification Report:")
-        print(classification_report(y_test, y_pred))
-        print("-" * 40)
-        print("Cek MLflow Dashboard Anda.")
+
 
 if __name__ == "__main__":
     main()
