@@ -42,11 +42,11 @@ jobs:
 
       - name: Build & Push Docker Image
         run: |
-          MODEL_PATH=$(ls -d MLProject/mlruns/*/*/artifacts/* | head -n 1)
+          MODEL_PATH=$(ls -d MLProject/mlruns/*/*/artifacts/model | head -n 1)
 
           mlflow models build-docker \
             -m "$MODEL_PATH" \
-            -n "${{ secrets.DOCKER_USERNAME }}/heart-disease:latest" \
+            -n "${{ secrets.DOCKER_USERNAME }}/heart-disease-ci:latest" \
             --install-mlflow
 
-          docker push ${{ secrets.DOCKER_USERNAME }}/heart-disease:latest
+          docker push ${{ secrets.DOCKER_USERNAME }}/heart-disease-ci:latest
